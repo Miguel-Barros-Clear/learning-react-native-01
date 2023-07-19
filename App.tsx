@@ -1,28 +1,32 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+
+import Slider from '@react-native-community/slider';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      feed: [
-        { id: '1', nome: 'Matheus', idade: 50, email: 'matheus@matheus.com' },
-        { id: '2', nome: 'Joao', idade: 22, email: 'joao@joao.com' },
-        { id: '3', nome: 'Henrique', idade: 39, email: 'henrique@henrique.com' },
-        { id: '4', nome: 'Paulo', idade: 15, email: 'paulo@paulo.com' },
-        { id: '5', nome: 'JOSE', idade: 12, email: 'jose@jose.com' },
-      ],
+      valor: 0,
     };
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <FlatList
-          data={this.state.feed}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => <Pessoa data={item} />}
+        <Slider
+          minimumValue={0}
+          maximumValue={100}
+          onValueChange={valorSelecionado =>
+            this.setState({ valor: valorSelecionado })
+          }
+          value={this.state.valor}
+          minimumTrackTintColor="#0F0"
+          maximumTrackTintColor="#F00"
         />
+        <Text style={{ textAlign: 'center', fontSize: 30 }}>
+          Você tem {this.state.valor.toFixed(1)} kg
+        </Text>
       </View>
     );
   }
@@ -30,28 +34,8 @@ class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  areaPessoa: {
-    backgroundColor: '#222',
-    height: 200,
-    marginBottom: 15,
-  },
-  textoPessoa: {
-    color: '#FFF',
-    fontSize: 20,
+    marginTop: 15,
   },
 });
 
 export default App;
-
-class Pessoa extends Component {
-  render() {
-    return (
-      <View style={styles.areaPessoa}>
-        <Text style={styles.textoPessoa}>Nome: {this.props.data.nome} </Text>
-        <Text style={styles.textoPessoa}>Idade: {this.props.data.idade} </Text>
-        <Text style={styles.textoPessoa}>Email: {this.props.data.email} </Text>
-      </View>
-    );
-  }
-}
