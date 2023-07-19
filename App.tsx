@@ -1,35 +1,20 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      nome: '',
-    };
-
-    this.pegaNome = this.pegaNome.bind(this);
-  }
-
-  pegaNome(texto) {
-    if (texto.length > 0) {
-      this.setState({ nome: 'Bem vindo: ' + texto });
-    } else {
-      this.setState({ nome: '' });
-    }
-  }
-
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite seu nome?"
-          underlineColorAndroid="transparent"
-          onChangeText={this.pegaNome}
-        />
-
-        <Text style={styles.texto}>{this.state.nome}</Text>
+        <ScrollView>
+          <View style={styles.box1} />
+          <View style={styles.box2} />
+          <View style={styles.box3} />
+          <View style={styles.box4} />
+          <View style={styles.box3} />
+          <View style={styles.box4} />
+          <View style={styles.box3} />
+          <View style={styles.box4} />
+        </ScrollView>
       </View>
     );
   }
@@ -39,17 +24,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  input: {
-    height: 45,
-    borderWidth: 1,
-    borderColor: '#222',
-    margin: 10,
-    fontSize: 20,
-    padding: 10,
+  box1: {
+    backgroundColor: 'red',
+    height: 250,
   },
-  texto: {
-    textAlign: 'center',
-    fontSize: 25,
+  box2: {
+    backgroundColor: 'green',
+    height: 250,
+  },
+  box3: {
+    backgroundColor: 'yellow',
+    height: 250,
+  },
+  box4: {
+    backgroundColor: 'blue',
+    height: 250,
   },
 });
 
