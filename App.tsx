@@ -1,14 +1,39 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { Animated, Platform, StyleSheet, Text, View } from 'react-native';
 
-import Conversor from './src/Conversor';
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      LarAnimada: new Animated.Value(150),
+      AltAnimada: new Animated.Value(50),
+    };
 
-class App extends Component {
+    Animated.timing(this.state.AltAnimada, {
+      toValue: 150,
+      duration: 500,
+    }).start();
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Conversor moedaA="USD" moedaB="BRL" />
-        <Conversor moedaA="EUR" moedaB="BRL" />
+        <Animated.View
+          style={{
+            width: this.state.LarAnimada,
+            height: this.state.AltAnimada,
+            backgroundColor: '#4169E1',
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{
+              color: '#FFF',
+              fontSize: 22,
+              textAlign: 'center',
+            }}>
+            Carregando...
+          </Text>
+        </Animated.View>
       </View>
     );
   }
