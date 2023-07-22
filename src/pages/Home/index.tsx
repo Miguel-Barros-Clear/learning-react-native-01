@@ -1,16 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-
 import { useNavigation } from '@react-navigation/native';
-
 export default function Home() {
   const navigation = useNavigation();
 
   function navegaSobre() {
-    navigation.navigate('Sobre', {
-      nome: 'Kauã dos Reis',
-      email: 'kauadrar@gmail.com',
-    });
+    navigation.navigate('Sobre');
   }
 
   return (
@@ -25,5 +20,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FF0000',
   },
 });
