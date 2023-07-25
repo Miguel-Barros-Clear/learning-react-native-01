@@ -15,18 +15,17 @@ import {
 
 import app from '../../services/firebaseConfig';
 
-export default function Login() {
+export default function Login({ changeStatus }) {
   const auth = getAuth(app);
   const [type, setType] = useState('cadastro');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   function handleLogin() {
     if (type === 'login') {
       const user = signInWithEmailAndPassword(auth, email, password)
         .then(user => {
-          console.log(user.user);
+          changeStatus(user.user.uid);
         })
         .catch(err => {
           console.log(err);
@@ -36,7 +35,7 @@ export default function Login() {
     } else {
       const user = createUserWithEmailAndPassword(auth, email, password)
         .then(user => {
-          console.log(user.user);
+          changeStatus(user.user.uid);
         })
         .catch(err => {
           console.log(err);
@@ -45,7 +44,6 @@ export default function Login() {
         });
     }
   }
-
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -61,7 +59,6 @@ export default function Login() {
         secureTextEntry={true}
         onChangeText={text => setPassword(text)}
       />
-
       <TouchableOpacity
         style={[
           styles.handleLogin,
