@@ -8,19 +8,24 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-
 import Login from './src/components/Login';
 import TaskList from './src/components/TaskList';
-
 let tasks = [
   { key: '1', nome: 'Comprar Coca cola' },
   { key: '2', nome: 'Estudar javascript' },
 ];
-
 export default function App() {
   const [user, setUser] = useState(null);
 
   const [newTask, setNewTask] = useState('');
+
+  function handleDelete(key) {
+    console.log(key);
+  }
+
+  function handleEdit(data) {
+    console.log('ITEM CLICADO', data);
+  }
 
   if (!user) {
     return <Login changeStatus={user => setUser(user)} />;
@@ -35,13 +40,19 @@ export default function App() {
           onChangeText={text => setNewTask(text)}
         />
         <TouchableOpacity style={styles.buttonAdd}>
-          <Text>+</Text>
+          <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
       <FlatList
         data={tasks}
         keyExtractor={item => item.key}
-        renderItem={({ item }) => <TaskList data={item} />}
+        renderItem={({ item }) => (
+          <TaskList
+            data={item}
+            deleteItem={handleDelete}
+            editItem={handleEdit}
+          />
+        )}
       />
     </SafeAreaView>
   );
