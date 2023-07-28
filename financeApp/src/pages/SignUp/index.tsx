@@ -1,4 +1,4 @@
-mport React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Platform } from 'react-native';
 
 import {
@@ -11,10 +11,15 @@ import {
   SubmitText,
 } from '../SignIn/styles';
 
+import { AuthContext } from '../../contexts/auth';
+
 export default function SignIn() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { user } = useContext(AuthContext);
+
+  console.log(user.nome);
 
   return (
     <Background>
@@ -28,7 +33,6 @@ export default function SignIn() {
             onChangeText={text => setNome(text)}
           />
         </AreaInput>
-
         <AreaInput>
           <Input
             placeholder="Email"
@@ -38,7 +42,6 @@ export default function SignIn() {
             onChangeText={text => setEmail(text)}
           />
         </AreaInput>
-
         <AreaInput>
           <Input
             placeholder="Senha"
@@ -48,7 +51,6 @@ export default function SignIn() {
             onChangeText={text => setPassword(text)}
           />
         </AreaInput>
-
         <SubmitButton>
           <SubmitText>Cadastrar</SubmitText>
         </SubmitButton>

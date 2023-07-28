@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../../contexts/auth';
 
 import {
   Background,
@@ -13,18 +14,22 @@ import {
   Link,
   LinkText,
 } from './styles';
-
 export default function SignIn() {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { user } = useContext(AuthContext);
+
+  function handleLogin() {
+    console.log(user.nome);
+    console.log(user.uid);
+  }
 
   return (
     <Background>
       <Container behavior={Platform.OS === 'ios' ? 'padding' : ''} enabled>
         <Logo source={require('../../assets/Logo.png')} />
-
         <AreaInput>
           <Input
             placeholder="Email"
@@ -43,7 +48,8 @@ export default function SignIn() {
             onChangeText={text => setPassword(text)}
           />
         </AreaInput>
-        <SubmitButton>
+
+        <SubmitButton onPress={handleLogin}>
           <SubmitText>Acessar</SubmitText>
         </SubmitButton>
 
