@@ -1,14 +1,20 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View, Text, StyleSheet, TouchableOpacity,
+} from 'react-native';
 
-export default function Product({ data }) {
+export default function Product({ data, addToCart }) {
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>{data.name}</Text>
-        <Text style={styles.price}>R$ {data.price}</Text>
+        <Text style={styles.price}>
+          R$
+          {' '}
+          {data.price}
+        </Text>
       </View>
 
-      <TouchableOpacity style={styles.buttonAdd}>
+      <TouchableOpacity style={styles.buttonAdd} onPress={addToCart}>
         <Text style={styles.buttonText}>+</Text>
       </TouchableOpacity>
     </View>
@@ -26,10 +32,10 @@ const styles = StyleSheet.create({
     paddingTop: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   title: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   buttonAdd: {
     paddingStart: 12,
@@ -38,5 +44,5 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingBottom: 6,
     borderRadius: 2,
-  }
-})
+  },
+});
