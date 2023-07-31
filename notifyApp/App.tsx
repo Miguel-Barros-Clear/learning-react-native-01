@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-
 import notifee, {
   AuthorizationStatus,
   EventType,
   AndroidImportance,
+  TriggerType,
+  TimestampTrigger,
 } from '@notifee/react-native';
 
 export default function App() {
   const [statusNotification, setStatusNotification] = useState(true);
-
   useEffect(() => {
     async function getPermission() {
       const settings = await notifee.requestPermission();
@@ -21,9 +21,21 @@ export default function App() {
         setStatusNotification(false);
       }
     }
-
     getPermission();
   }, []);
+
+  notifee.onBackgroundEvent(async ({ type, detail }) => {
+    const { notification, pressAction } = detail;
+
+    if (type === EventType.PRESS) {
+      console.log('TOCOU NA NOTIFICACAO BACKGROUND: ', pressAction?.id);
+      if (notification?.id) {
+        await notifee.cancelNotification(notification?.id);
+      }
+    }
+
+    console.log('EVENT BACKGROUND');
+  });
 
   useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
@@ -36,19 +48,16 @@ export default function App() {
       }
     });
   }, []);
-
   async function handleNotificate() {
     if (!statusNotification) {
       return;
     }
-
     const channelId = await notifee.createChannel({
       id: 'lembrete',
       name: 'lembrete',
       vibration: true,
       importance: AndroidImportance.HIGH,
     });
-
     await notifee.displayNotification({
       id: 'lembrete',
       title: 'Estudar programaçao!',
@@ -62,10 +71,49 @@ export default function App() {
     });
   }
 
+  async function handleScheduleNotification() {
+    const date = new Date(Date.now());
+
+    date.setMinutes(date.getMinutes() + 1);
+
+    const trigger: TimestampTrigger = {
+      type: TriggerType.TIMESTAMP,
+      timestamp: date.getTime(),
+    };
+
+    await notifee.createTriggerNotification(
+      {
+        title: 'Lembrete Estudo',
+        body: 'Estudar JavaScript as 15:30',
+        android: {
+          channelId: 'lembrete',
+          importance: AndroidImportance.HIGH,
+          pressAction: {
+            id: 'default',
+          },
+        },
+      },
+      trigger,
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text>Notificaçoes App</Text>
       <Button title="Enviar notificaçao" onPress={handleNotificate} />
+
+      <Button
+        title="Agendar notificaçao"
+        onPress={handleScheduleNotification}
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
