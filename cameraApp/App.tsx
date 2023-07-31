@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CameraRoll from '@react-native-community/cameraroll';
+import ImagePicker from 'react-native-image-picker';
 
 export default function App() {
   const [type, setType] = useState(RNCamera.Constants.Type.back);
@@ -23,28 +24,22 @@ export default function App() {
     setCapturedPhoto(data.uri);
     setOpen(true);
     console.log('FOTO TIRADA CAMERA: ' + data.uri);
-
     //Chama funcao salvar a foto no album
     savePicture(data.uri);
   }
-
   async function hasAndroidPermission() {
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-
     const hasPermission = await PermissionsAndroid.check(permission);
     if (hasPermission) {
       return true;
     }
-
     const status = await PermissionsAndroid.request(permission);
     return status === 'granted';
   }
-
   async function savePicture(data) {
     if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
       return;
     }
-
     CameraRoll.save(data, 'photo')
       .then(res => {
         console.log('SALVO COM SUCESSO: ' + res);
@@ -53,7 +48,6 @@ export default function App() {
         console.log('ERROR AO SALVAR: ' + err);
       });
   }
-
   function toggleCam() {
     setType(
       type === RNCamera.Constants.Type.back
@@ -61,6 +55,27 @@ export default function App() {
         : RNCamera.Constants.Type.back,
     );
   }
+
+  function openAlbum() {
+    const options = {
+      title: 'Selecione uma foto',
+      chooseFromLibraryButtonTitle: 'Buscar foto do album..',
+      noData: true,
+      mediaType: 'photo',
+    };
+
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('Image Picker cancelado...');
+      } else if (response.error) {
+        console.log('Gerou algum erro: ' + response.error);
+      } else {
+        setCapturedPhoto(response.uri);
+        setOpen(true);
+      }
+    });
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar hidden={true} />
@@ -91,7 +106,8 @@ export default function App() {
                 style={styles.capture}>
                 <Text>Tirar foto</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => { }} style={styles.capture}>
+
+              <TouchableOpacity onPress={openAlbum} style={styles.capture}>
                 <Text>Album</Text>
               </TouchableOpacity>
             </View>
