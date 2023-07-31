@@ -55,7 +55,13 @@ export default function Home() {
         >
           <View style={stlyes.dot}>
             <Text style={stlyes.dotText}>
-              {cart?.length}
+              {cart.length >= 1 && (
+                <View style={stlyes.dot}>
+                  <Text style={stlyes.dotText}>
+                    {cart?.length}
+                  </Text>
+                </View>
+              )}
             </Text>
           </View>
           <Feather name="shopping-cart" size={30} color="#000" />
